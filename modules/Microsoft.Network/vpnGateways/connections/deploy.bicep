@@ -37,6 +37,9 @@ param routingWeight int = 0
 @description('Optional. Expected bandwidth in MBPS.')
 param connectionBandwidth int = 10
 
+@description('Optional. DPD timeout in seconds for vpn connection.')
+param dpdTimeoutSeconds int = 45
+
 @description('Optional. Gateway connection protocol.')
 @allowed([
   'IKEv1'
@@ -65,15 +68,16 @@ resource defaultTelemetry 'Microsoft.Resources/deployments@2021-04-01' = if (ena
   }
 }
 
-resource vpnGateway 'Microsoft.Network/vpnGateways@2021-08-01' existing = {
+resource vpnGateway 'Microsoft.Network/vpnGateways@2022-07-01' existing = {
   name: vpnGatewayName
 }
 
-resource vpnConnection 'Microsoft.Network/vpnGateways/vpnConnections@2021-08-01' = {
+resource vpnConnection 'Microsoft.Network/vpnGateways/vpnConnections@2022-07-01' = {
   name: name
   parent: vpnGateway
   properties: {
     connectionBandwidth: connectionBandwidth
+    dpdTimeoutSeconds: dpdTimeoutSeconds
     enableBgp: enableBgp
     enableInternetSecurity: enableInternetSecurity
     enableRateLimiting: enableRateLimiting

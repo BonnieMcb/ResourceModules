@@ -53,7 +53,7 @@ resource defaultTelemetry 'Microsoft.Resources/deployments@2021-04-01' = if (ena
   }
 }
 
-resource vpnGateway 'Microsoft.Network/vpnGateways@2021-08-01' = {
+resource vpnGateway 'Microsoft.Network/vpnGateways@2022-07-01' = {
   name: name
   location: location
   tags: tags
@@ -97,6 +97,7 @@ module vpnGateway_connections 'connections/deploy.bicep' = [for (connection, ind
     name: connection.name
     vpnGatewayName: vpnGateway.name
     connectionBandwidth: contains(connection, 'connectionBandwidth') ? connection.connectionBandwidth : 10
+    dpdTimeoutSeconds: contains(connection, 'dpdTimeoutSeconds') ? connection.dpdTimeoutSeconds : 45
     enableBgp: contains(connection, 'enableBgp') ? connection.enableBgp : false
     enableInternetSecurity: contains(connection, 'enableInternetSecurity') ? connection.enableInternetSecurity : false
     remoteVpnSiteResourceId: contains(connection, 'remoteVpnSiteResourceId') ? connection.remoteVpnSiteResourceId : ''
